@@ -62,6 +62,7 @@ class GxEPD2
       GDEW1248T3, Waveshare_12_24_bw = GDEW1248T3,
       ED060SCT, // on Waveshare IT8951 Driver HAT
       ED060KC1, // on Waveshare IT8951 Driver HAT 1448x1072
+      ED047TC1, M5Paper = ED047TC1, // on M5Paper with IT8951 driver
       // 3-color
       GDEW0154Z04, Waveshare_1_54_bwr = GDEW0154Z04,
       GDEH0154Z90, Waveshare_1_54_bwr_Z90 = GDEH0154Z90,
