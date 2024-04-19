@@ -89,6 +89,7 @@ class GxEPD2
       ED060KC1, // on Waveshare IT8951 Driver HAT 1448x1072
       ED078KC2, // on Waveshare IT8951 Driver HAT 1872x1404
       ES103TC1, // on Waveshare IT8951 Driver HAT 1872x1404
+      ED047TC1, M5Paper = ED047TC1, // on M5Paper with IT8951 driver
       // 3-color
       GDEW0154Z04, Waveshare_1_54_bwr = GDEW0154Z04,
       GDEH0154Z90, Waveshare_1_54_bwr_Z90 = GDEH0154Z90,

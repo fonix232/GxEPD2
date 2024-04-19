@@ -205,6 +205,9 @@
 #if __has_include("it8951/GxEPD2_it60.h")
 #include "it8951/GxEPD2_it60.h"
 #endif
+#if __has_include("it8951/GxEPD2_m5paper.h")
+#include "it8951/GxEPD2_m5paper.h"
+#endif
 #if __has_include("it8951/GxEPD2_it60_1448x1072.h")
 #include "it8951/GxEPD2_it60_1448x1072.h"
 #endif
