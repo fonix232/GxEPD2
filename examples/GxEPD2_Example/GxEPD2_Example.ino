@@ -149,8 +149,44 @@ SPIClassRP2040 SPIn(spi1, 12, 13, 10, 11); // need be valid pins for same SPI ch
 SPIClass hspi(HSPI);
 #endif
 
+#if defined(M5PAPER)
+
+// The M5Paper requires a specific initialisation sequence to enable certain MOSFETs 
+// that provide power to various parts, including the EPD
+
+#define M5EPD_MAIN_PWR_PIN   2
+#define M5EPD_EXT_PWR_EN_PIN 5
+#define M5EPD_MOSI_PIN       12
+#define M5EPD_MISO_PIN       13
+#define M5EPD_SCK_PIN        14
+#define M5EPD_SS_PIN         15
+#define M5EPD_BUSY_PIN       27
+#define M5EPD_EPD_PWR_EN_PIN 23
+
+void init_M5Paper()
+{
+  pinMode(M5EPD_MAIN_PWR_PIN, OUTPUT);
+  digitalWrite(M5EPD_MAIN_PWR_PIN, 1);
+}
+
+void setup_M5Paper()
+{
+  pinMode(M5EPD_EXT_PWR_EN_PIN, OUTPUT);
+  pinMode(M5EPD_EPD_PWR_EN_PIN, OUTPUT);
+  delay(100);
+
+  digitalWrite(M5EPD_EXT_PWR_EN_PIN, 1);
+  digitalWrite(M5EPD_EPD_PWR_EN_PIN, 1);
+  delay(1000);
+}
+#endif
+
 void setup()
 {
+#if defined(M5PAPER)
+  init_M5Paper();
+#endif
+
   Serial.begin(115200);
   Serial.println();
   Serial.println("setup");
@@ -165,12 +201,16 @@ void setup()
   // uncomment next line for Waveshare PhotoPainter module
   pinMode(16, OUTPUT); digitalWrite(16, HIGH); // power to the paper
 #endif
-#if defined(ESP32) && defined(USE_HSPI_FOR_EPD)
+#if defined(ESP32) && defined(USE_HSPI_FOR_EPD) && !defined(M5PAPER) // M5Paper does not like HSPI
   hspi.begin(13, 12, 14, 15); // remap hspi for EPD (swap pins)
   display.epd2.selectSPI(hspi, SPISettings(4000000, MSBFIRST, SPI_MODE0));
 #elif (defined(ARDUINO_ARCH_ESP32) && defined(ARDUINO_LOLIN_S2_MINI))
   // SPI.begin(sck, miso, mosi, ss); // preset for remapped pins
   SPI.begin(18, -1, 16, 33); // my LOLIN ESP32 S2 mini connection
+#elif defined(M5PAPER) // M5Paper
+  Serial.println("Initialising M5Paper bits");
+  setup_M5Paper();
+  SPI.begin(M5EPD_SCK_PIN, M5EPD_MISO_PIN, M5EPD_MOSI_PIN, M5EPD_SS_PIN); // M5Paper connection
 #endif
   //display.init(115200); // default 10ms reset pulse, e.g. for bare panels with DESPI-C02
   display.init(115200, true, 2, false); // USE THIS for Waveshare boards with "clever" reset circuit, 2ms reset pulse
